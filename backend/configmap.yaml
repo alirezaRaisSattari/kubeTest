@@ -1,0 +1,13 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: backend-config
+  namespace: system-user
+data:
+  DB_HOST: postgres
+  DB_PORT: "5432"
+  DB_NAME: mydb
+  DB_USER: admin
+  API_PORT: "3000"
+  NODE_ENV: "production"
+  REPLICAS: "2"
