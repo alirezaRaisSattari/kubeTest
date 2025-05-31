@@ -1,101 +1,141 @@
 # Kubernetes Application Deployment
 
-This repository contains Kubernetes manifests for deploying a full-stack application with PostgreSQL, Node.js backend, and Nginx frontend using Kustomize.
+This repository contains a Kubernetes-based application deployment setup with automated build and deployment scripts.
 
-## Directory Structure
+## Project Structure
 
 ```
-├── base/
-│   ├── namespace.yaml
-│   └── kustomization.yaml
-├── postgres/
-│   ├── secret.yaml
-│   ├── pvc.yaml
-│   ├── statefulset.yaml
-│   ├── service.yaml
-│   └── kustomization.yaml
-├── backend/
-│   ├── configmap.yaml
-│   ├── secret.yaml
-│   ├── deployment.yaml
-│   ├── service.yaml
-│   ├── init-container-script.sh
-│   └── kustomization.yaml
-├── nginx/
-│   ├── deployment.yaml
-│   ├── service.yaml
-│   └── kustomization.yaml
-├── deploy.sh
-├── build.sh
-├── cleanup.sh
-├── README.md
-└── BUILD.md
+.
+├── backend/         # Backend application code
+├── nginx/          # Nginx configuration and static files
+├── scripts/        # Build and deployment scripts
+│   ├── build.sh       # Script for building Docker images
+│   ├── deploy.sh      # Script for deploying to Kubernetes
+│   └── build-deploy.sh # Combined build and deploy script
 ```
 
-## Prerequisites
+## Available Scripts
 
-- Kubernetes cluster (Minikube or Docker Desktop)
-- kubectl configured
-- Docker installed
+### 1. Build Script (`build.sh`)
 
-## Quick Start
+Builds all required Docker images for the application.
 
-1. Build the local images:
 ```bash
+# Make the script executable
+chmod +x build.sh
+
+# Run the build script
 ./build.sh
 ```
 
-2. Deploy the application:
+This script will:
+
+- Build the backend Docker image
+- Build the Nginx Docker image
+- Verify all images were built successfully
+
+### 2. Deploy Script (`deploy.sh`)
+
+Deploys the application to your Kubernetes cluster.
+
 ```bash
+# Make the script executable
+chmod +x deploy.sh
+
+# Run the deploy script
 ./deploy.sh
 ```
 
-3. Clean up all resources:
-```bash
-./cleanup.sh
-```
+This script will:
 
-## Manual Deployment Steps
+- Create necessary namespaces
+- Apply Kubernetes configurations
+- Deploy all application components
+- Verify the deployment status
 
-If you prefer to deploy manually, follow these steps:
+### 3. Build and Deploy Script (`build-deploy.sh`)
 
-1. Create the namespace:
-```bash
-kubectl apply -k base/
-```
-
-2. Deploy PostgreSQL:
-```bash
-kubectl apply -k postgres/
-```
-
-3. Deploy Backend:
-```bash
-kubectl apply -k backend/
-```
-
-4. Deploy Nginx:
-```bash
-kubectl apply -k nginx/
-```
-
-5. Check deployment status:
-```bash
-kubectl get pods -n system-user
-```
-
-## Accessing the Application
-
-The application will be accessible through the Nginx NodePort service. Get the node port using:
+Combines both building and deployment in one command.
 
 ```bash
-kubectl get svc -n system-user nginx
+# Make the script executable
+chmod +x build-deploy.sh
+
+# Run the build and deploy script
+./build-deploy.sh
 ```
 
-## Notes
+This script will:
 
-- Make sure to update the secrets with your own base64 encoded values
-- Adjust resource limits and requests according to your needs
-- The PostgreSQL StatefulSet uses persistent storage, ensure your cluster has the required storage class
-- All resources are deployed in the `system-user` namespace
-- The deployment uses Kustomize for better resource management 
+1. Build all Docker images
+2. Deploy the application to Kubernetes
+3. Verify the entire setup
+
+## Troubleshooting
+
+### Common Issues
+
+1. **Image Build Issues**
+
+   ```bash
+   # Verify Docker build context
+   ls -la backend/
+   ls -la nginx/
+
+   # Force rebuild without cache
+   docker build --no-cache -t backend:latest backend/
+   docker build --no-cache -t nginx:latest nginx/
+   ```
+
+2. **Deployment Issues**
+
+   ```bash
+   # Check pod status
+   kubectl get pods -n system-user
+
+   # View pod logs
+   kubectl logs -n system-user -l app=backend
+   kubectl logs -n system-user -l app=nginx
+   ```
+
+3. **Database Connection Issues**
+
+   ```bash
+   # Check PostgreSQL status
+   kubectl get pods -n system-user -l app=postgres
+   
+   # View PostgreSQL logs
+   kubectl logs -n system-user -l app=postgres
+   ```
+
+## Best Practices
+
+1. Always use specific version tags in production
+2. Implement proper health checks
+3. Use secrets for sensitive information
+4. Set appropriate resource limits
+5. Implement proper logging
+6. Use init containers for dependency checks
+7. Implement proper backup strategies
+8. Use proper security contexts
+9. Implement proper monitoring
+10. Use proper network policies
+
+## Prerequisites
+
+- Docker installed and running
+- Kubernetes cluster (local or remote) configured
+- `kubectl` CLI tool installed
+- Access to container registry (if using remote cluster)
+
+## Contributing
+
+1. Fork the repository
+2. Create your feature branch
+3. Commit your changes
+4. Push to the branch
+5. Create a new Pull Request
+
+## License(i have license so i am bad ass)
+
+This project is licensed under the MIT License - see the LICENSE file for details.
