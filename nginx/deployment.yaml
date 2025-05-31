@@ -10,7 +10,7 @@ data:
     }
     http {
       upstream backend {
-        server backend:3000;
+        server backend:8000;
       }
       server {
         listen 80;

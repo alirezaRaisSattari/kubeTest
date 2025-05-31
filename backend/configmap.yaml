@@ -8,6 +8,6 @@ data:
   DB_PORT: "5432"
   DB_NAME: mydb
   DB_USER: admin
-  API_PORT: "3000"
+  API_PORT: "8000"
   NODE_ENV: "production"
   REPLICAS: "2"

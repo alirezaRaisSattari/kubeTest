@@ -7,9 +7,9 @@ RED='\033[0;31m'
 NC='\033[0m' # No Color
 
 # Timeout values (in seconds)
-POSTGRES_TIMEOUT=60  # 1 minutes
-BACKEND_TIMEOUT=60   # 1 minutes
-NGINX_TIMEOUT=60     # 1 minutes
+POSTGRES_TIMEOUT=15  
+BACKEND_TIMEOUT=20   
+NGINX_TIMEOUT=15     
 
 echo -e "${YELLOW}Starting deployment...${NC}"
 

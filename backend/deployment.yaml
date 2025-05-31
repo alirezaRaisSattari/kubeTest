@@ -34,18 +34,18 @@ spec:
             name: backend-config
         - secretRef:
             name: backend-secret
-        livenessProbe:
-          httpGet:
-            path: /health
-            port: 8000
-          initialDelaySeconds: 30
-          periodSeconds: 10
-        readinessProbe:
-          httpGet:
-            path: /ready
-            port: 8000
-          initialDelaySeconds: 5
-          periodSeconds: 10
+        # livenessProbe:
+        #   httpGet:
+        #     path: /health
+        #     port: 8000
+        #   initialDelaySeconds: 30
+        #   periodSeconds: 10
+        # readinessProbe:
+        #   httpGet:
+        #     path: /ready
+        #     port: 8000
+        #   initialDelaySeconds: 5
+        #   periodSeconds: 10
         resources:
           requests:
             memory: "128Mi"

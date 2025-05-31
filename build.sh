@@ -11,7 +11,7 @@ echo -e "${YELLOW}Starting local build process...${NC}"
 # Build Backend Image
 echo -e "${GREEN}Building backend image...${NC}"
 cd backend
-docker build -t backend:latest .
+docker build --no-cache -t backend:latest .
 if [ $? -ne 0 ]; then
     echo -e "${RED}Backend image build failed${NC}"
     exit 1
